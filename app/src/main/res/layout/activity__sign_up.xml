@@ -68,7 +68,8 @@
             android:text="Already a member? Login"
             android:gravity="center"
             android:textSize="16sp"
-            tools:ignore="HardcodedText" />
+            tools:ignore="HardcodedText"
+            android:onClick="clk"/>
 
     </LinearLayout>
 </ScrollView>
