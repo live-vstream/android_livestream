@@ -13,6 +13,8 @@ public class AppConfig extends Application {
     public static String URL_SERVER = "http://192.168.0.100:4300/api/user/";
     // Server user login url
     public static String URL_LOGIN = URL_SERVER + "authenticate";
+    // Server user signup url
+    public static String URL_SIGNUP = URL_SERVER + "signup";
 
 
 

@@ -64,7 +64,6 @@ public class Activity_signin extends AppCompatActivity {
             onLoginFailed();
             return;
         }
-        //_loginButton.setEnabled(false);
 
         progressDialog = new ProgressDialog(Activity_signin.this,
                 R.style.AppTheme_Dark_Dialog);
@@ -100,10 +99,10 @@ public class Activity_signin extends AppCompatActivity {
     public boolean validate() {
         boolean valid = true;
 
-        String emailid = _nameText.getText().toString();
+        String name = _nameText.getText().toString();
         String password = _passwordText.getText().toString();
 
-        if (emailid.isEmpty()) {
+        if (name.isEmpty()) {
             _nameText.setError("Enter a valid Name");
             valid = false;
         } else {
@@ -121,7 +120,7 @@ public class Activity_signin extends AppCompatActivity {
     }
 
     /**
-     * function to verify login details in mysql db
+     * function to verify login details
      * */
     private void checkLogin(final String name, final String password) {
         // Tag used to cancel the request
@@ -144,7 +143,7 @@ public class Activity_signin extends AppCompatActivity {
                             session.setLogin(true);
 
                             // Launch main drawer activity
-                            Intent intent = new Intent(Activity_signin.this,
+                           Intent intent = new Intent(Activity_signin.this,
                                     MainActivity.class);
                             startActivity(intent);
                             finish();
