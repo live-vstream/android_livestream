@@ -10,7 +10,7 @@ import java.util.Date;
  */
 
 public class AppConfig extends Application {
-    public static String URL_SERVER = "http://localhost:4200/api/user/";
+    public static String URL_SERVER = "http://192.168.0.100:4300/api/user/";
     // Server user login url
     public static String URL_LOGIN = URL_SERVER + "authenticate";
 

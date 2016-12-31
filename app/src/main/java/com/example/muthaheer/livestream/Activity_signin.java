@@ -27,10 +27,9 @@ import java.util.Map;
 public class Activity_signin extends AppCompatActivity {
     private static final String TAG = "Activity_signin";
 
-    EditText _nameText = (EditText)findViewById(R.id.input_emailid);
-    EditText _passwordText = (EditText) findViewById(R.id.input_password);
-    Button _loginButton = (Button) findViewById(R.id.btn_signin);
-
+    EditText _nameText;
+    EditText _passwordText ;
+    Button _loginButton ;
 
     private SessionManager session;
     ProgressDialog progressDialog;
@@ -41,7 +40,9 @@ public class Activity_signin extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signin);
 
-
+        _nameText = (EditText)findViewById(R.id.input_name);
+        _passwordText = (EditText) findViewById(R.id.input_password);
+        _loginButton = (Button) findViewById(R.id.btn_signin);
 
         // Session manager
         session = new SessionManager(getApplicationContext());
@@ -103,7 +104,7 @@ public class Activity_signin extends AppCompatActivity {
         String password = _passwordText.getText().toString();
 
         if (emailid.isEmpty()) {
-            _nameText.setError("Enter a valid Emailid");
+            _nameText.setError("Enter a valid Name");
             valid = false;
         } else {
             _nameText.setError(null);
@@ -136,10 +137,10 @@ public class Activity_signin extends AppCompatActivity {
                 progressDialog.dismiss();
                 try {
                     JSONObject jObj = new JSONObject(response);
-                    boolean error = jObj.getBoolean("error");
+                    boolean success = jObj.getBoolean("success");
 
                     // Check for error node in json
-                    if (!error) {
+                    if (success) {
                             session.setLogin(true);
 
                             // Launch main drawer activity
@@ -150,7 +151,7 @@ public class Activity_signin extends AppCompatActivity {
                         }
                     else {
                         // Error in login. Get the error message
-                        String errorMsg = jObj.getString("error_msg");
+                        String errorMsg = jObj.getString("msg");
                         Toast.makeText(getApplicationContext(),
                                 errorMsg, Toast.LENGTH_LONG).show();
                     }

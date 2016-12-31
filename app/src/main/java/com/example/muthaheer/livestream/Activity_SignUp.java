@@ -10,15 +10,21 @@ import android.widget.TextView;
 
 public class Activity_SignUp extends AppCompatActivity {
 
+    TextView _loginLink;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity__sign_up);
 
+        _loginLink = (TextView) findViewById(R.id.link_login);
+        _loginLink.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(Activity_SignUp.this, Activity_signin.class);
+                startActivity(i);
+
+            }
+        });
     }
- public void clk(View v)
- {
-     Intent i=new Intent(this,Activity_signin.class);
-     startActivity(i);
- }
+
 }
