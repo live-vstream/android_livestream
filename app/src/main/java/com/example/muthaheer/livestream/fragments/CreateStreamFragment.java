@@ -1,8 +1,8 @@
 package com.example.muthaheer.livestream.fragments;
 
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -44,8 +44,16 @@ public class CreateStreamFragment extends Fragment {
 
         }
 
-        mCreateButton = (Button) getActivity().findViewById(R.id.create_stream_btn);
-        mStreamNameET = (EditText) getActivity().findViewById(R.id.create_stream_name);
+
+
+
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        mCreateButton = (Button) view.findViewById(R.id.create_stream_btn);
+        mStreamNameET = (EditText) view.findViewById(R.id.create_stream_name);
 
         mCreateButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -55,8 +63,6 @@ public class CreateStreamFragment extends Fragment {
                 }
             }
         });
-
-
     }
 
     @Override
