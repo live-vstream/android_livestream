@@ -45,7 +45,7 @@ public class SigninActivity extends AppCompatActivity {
         _loginButton = (Button) findViewById(R.id.btn_signin);
 
         // Session manager
-        session = new SessionManager(getApplicationContext());
+        session = ((AppController) getApplicationContext()).getSessionManager();
 
         _loginButton.setOnClickListener(new View.OnClickListener() {
 

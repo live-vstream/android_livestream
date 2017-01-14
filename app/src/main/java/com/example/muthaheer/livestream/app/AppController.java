@@ -6,6 +6,7 @@ import android.text.TextUtils;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
+import com.example.muthaheer.livestream.helper.SessionManager;
 
 /**
  * Created by muthaheer on 25/12/16.
@@ -18,10 +19,13 @@ public class AppController extends Application{
 
     private static AppController mInstance;
 
+    private SessionManager mSessionManager;
+
     @Override
     public void onCreate() {
         super.onCreate();
         mInstance = this;
+        mSessionManager = new SessionManager(this);
     }
 
     public static synchronized AppController getInstance() {
@@ -50,5 +54,9 @@ public class AppController extends Application{
         if (mRequestQueue != null) {
             mRequestQueue.cancelAll(tag);
         }
+    }
+
+    public SessionManager getSessionManager() {
+        return mSessionManager;
     }
 }

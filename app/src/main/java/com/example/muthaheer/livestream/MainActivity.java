@@ -17,7 +17,6 @@ import com.example.muthaheer.livestream.app.AppConfig;
 import com.example.muthaheer.livestream.app.AppController;
 import com.example.muthaheer.livestream.fragments.CameraPreviewFragment;
 import com.example.muthaheer.livestream.fragments.CreateStreamFragment;
-import com.example.muthaheer.livestream.helper.SessionManager;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -29,17 +28,17 @@ public class MainActivity extends AppCompatActivity implements CreateStreamFragm
 
     FrameLayout mContentFrame;
     String mAuthToken;
-    SessionManager mSession;
+    AppController mApp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mSession = new SessionManager(this);
+        mApp = (AppController) getApplicationContext();
 
         mContentFrame = (FrameLayout) findViewById(R.id.main_content_frame);
-        mAuthToken = mSession.getAuthToken();
+        mAuthToken = mApp.getSessionManager().getAuthToken();
 
         // set the camera preview fragment as default for now
         getSupportFragmentManager().beginTransaction().add(R.id.main_content_frame, CreateStreamFragment.newInstance())

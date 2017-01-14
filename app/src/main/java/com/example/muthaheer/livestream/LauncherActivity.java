@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
+import com.example.muthaheer.livestream.app.AppController;
 import com.example.muthaheer.livestream.helper.SessionManager;
 
 public class LauncherActivity extends AppCompatActivity {
@@ -15,7 +16,7 @@ public class LauncherActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
        // setContentView(R.layout.activity_launcher);
 
-        mSession = new SessionManager(this);
+        mSession = ((AppController) getApplicationContext()).getSessionManager();
 
         Intent intent;
         if(mSession.isLoggedIn()) {
