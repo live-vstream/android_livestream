@@ -146,4 +146,10 @@ public class MainActivity extends AppCompatActivity implements CreateStreamFragm
 
     }
 
+    // Ignore the back button for now
+    // TODO: ask the user what his/her real intention is on pressing back button
+    @Override
+    public void onBackPressed() {
+        //super.onBackPressed();
+    }
 }
