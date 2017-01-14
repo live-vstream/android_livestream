@@ -20,6 +20,7 @@ public class AppController extends Application{
     private static AppController mInstance;
 
     private SessionManager mSessionManager;
+    private String mCurrentStreamToken;
 
     @Override
     public void onCreate() {
@@ -58,5 +59,13 @@ public class AppController extends Application{
 
     public SessionManager getSessionManager() {
         return mSessionManager;
+    }
+
+    public String getCurrentStreamToken() {
+        return mCurrentStreamToken;
+    }
+
+    public void setCurrentStreamToken(String mCurrentStreamToken) {
+        this.mCurrentStreamToken = mCurrentStreamToken;
     }
 }

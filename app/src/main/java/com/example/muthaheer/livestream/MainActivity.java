@@ -126,6 +126,7 @@ public class MainActivity extends AppCompatActivity implements CreateStreamFragm
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         // replace current fragment with CameraPreviewFragment
+                        mApp.setCurrentStreamToken(streamToken);
                         getSupportFragmentManager().beginTransaction()
                                 .replace(R.id.main_content_frame, CameraPreviewFragment.newInstance())
                                 .commit();
