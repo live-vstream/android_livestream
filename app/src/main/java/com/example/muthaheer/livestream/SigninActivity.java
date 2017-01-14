@@ -28,8 +28,8 @@ public class SigninActivity extends AppCompatActivity {
     private static final String TAG = "Activity_signin";
 
     EditText _nameText;
-    EditText _passwordText ;
-    Button _loginButton ;
+    EditText _passwordText;
+    Button _loginButton;
 
     private SessionManager session;
     ProgressDialog progressDialog;
@@ -40,7 +40,7 @@ public class SigninActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signin);
 
-        _nameText = (EditText)findViewById(R.id.input_name);
+        _nameText = (EditText) findViewById(R.id.input_name);
         _passwordText = (EditText) findViewById(R.id.input_password);
         _loginButton = (Button) findViewById(R.id.btn_signin);
 
@@ -75,8 +75,7 @@ public class SigninActivity extends AppCompatActivity {
         final String password = _passwordText.getText().toString();
 
 
-
-                        checkLogin(name, password);
+        checkLogin(name, password);
 
     }
 
@@ -121,7 +120,7 @@ public class SigninActivity extends AppCompatActivity {
 
     /**
      * function to verify login details
-     * */
+     */
     private void checkLogin(final String name, final String password) {
         // Tag used to cancel the request
         String tag_string_req = "req_login";
@@ -140,15 +139,16 @@ public class SigninActivity extends AppCompatActivity {
 
                     // Check for error node in json
                     if (success) {
-                            session.setLogin(true);
+                        String authToken = jObj.getString("token");
+                        // on success, we get a token as a reponse, so save it!
+                        session.setLogin(true, authToken);
 
-                            // Launch main drawer activity
-                           Intent intent = new Intent(SigninActivity.this,
-                                    MainActivity.class);
-                            startActivity(intent);
-                            finish();
-                        }
-                    else {
+                        // Launch main drawer activity
+                        Intent intent = new Intent(SigninActivity.this,
+                                MainActivity.class);
+                        startActivity(intent);
+                        finish();
+                    } else {
                         // Error in login. Get the error message
                         String errorMsg = jObj.getString("msg");
                         Toast.makeText(getApplicationContext(),

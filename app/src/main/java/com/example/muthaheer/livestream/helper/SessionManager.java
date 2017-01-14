@@ -25,6 +25,7 @@ public class SessionManager {
     private static final String PREF_NAME = "LiveStream";
 
     private static final String KEY_IS_LOGGED_IN = "isLoggedIn";
+    private static final String KEY_AUTH_TOKEN = "authtoken";
 
     public SessionManager(Context context) {
         this._context = context;
@@ -35,6 +36,25 @@ public class SessionManager {
     public void setLogin(boolean isLoggedIn) {
 
         editor.putBoolean(KEY_IS_LOGGED_IN, isLoggedIn);
+
+        if(!isLoggedIn) {
+            editor.remove(KEY_AUTH_TOKEN);
+        }
+
+        // commit changes
+        editor.commit();
+
+        Log.d(TAG, "User login session modified!");
+    }
+
+    public void setLogin(boolean isLoggedIn, String authToken) {
+
+
+        editor.putBoolean(KEY_IS_LOGGED_IN, isLoggedIn);
+
+        if(isLoggedIn) {
+            editor.putString(KEY_AUTH_TOKEN, authToken);
+        }
 
         // commit changes
         editor.commit();
