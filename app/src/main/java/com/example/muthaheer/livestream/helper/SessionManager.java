@@ -65,4 +65,8 @@ public class SessionManager {
     public boolean isLoggedIn(){
         return pref.getBoolean(KEY_IS_LOGGED_IN, false);
     }
+
+    public String getAuthToken() {
+        return pref.getString(KEY_AUTH_TOKEN, null);
+    }
 }

@@ -1,9 +1,13 @@
 package com.example.muthaheer.livestream;
 
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.FrameLayout;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -11,7 +15,12 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.example.muthaheer.livestream.app.AppConfig;
 import com.example.muthaheer.livestream.app.AppController;
+import com.example.muthaheer.livestream.fragments.CameraPreviewFragment;
 import com.example.muthaheer.livestream.fragments.CreateStreamFragment;
+import com.example.muthaheer.livestream.helper.SessionManager;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -19,13 +28,18 @@ import java.util.Map;
 public class MainActivity extends AppCompatActivity implements CreateStreamFragment.OnFragmentInteractionListener{
 
     FrameLayout mContentFrame;
+    String mAuthToken;
+    SessionManager mSession;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        mSession = new SessionManager(this);
+
         mContentFrame = (FrameLayout) findViewById(R.id.main_content_frame);
+        mAuthToken = mSession.getAuthToken();
 
         // set the camera preview fragment as default for now
         getSupportFragmentManager().beginTransaction().add(R.id.main_content_frame, CreateStreamFragment.newInstance())
@@ -47,8 +61,23 @@ public class MainActivity extends AppCompatActivity implements CreateStreamFragm
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-
                         requestTokenProgress.hide();
+                        try {
+                            JSONObject resJson = new JSONObject(response);
+                            boolean success = resJson.getBoolean("success");
+                            if(success) {
+                                String streamToken = resJson.getString("token");
+
+                                displayTokenDialog(streamToken);
+                            } else {
+                                Toast.makeText(MainActivity.this, resJson.getString("msg"), Toast.LENGTH_SHORT).show();
+                            }
+
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
                     }
                 },
                 new Response.ErrorListener() {
@@ -69,7 +98,7 @@ public class MainActivity extends AppCompatActivity implements CreateStreamFragm
             @Override
             public Map<String, String> getHeaders() {
                 Map<String, String> headers = new HashMap<String, String>();
-                headers.put("Authorization", "JWT eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJfaWQiOiI1ODVlNmJkN2JkYmJkMjMzMTRlZDJkMmMiLCJuYW1lIjoia2FzaGlmIiwicGFzc3dvcmQiOiIkMmEkMTAkMGZrckZSVjc1VVoxS2Q5RjhNLmZQZU41aWRHRVFmaW1VQjkuaGVKWEJvc0dGM3Q1cWsyME8iLCJfX3YiOjB9.S6Op-lD8JdU9pAg5FhNk2lNM1KdATbl5xkdMo5NhS7Q");
+                headers.put("Authorization", mAuthToken);
 
                 return headers;
             }
@@ -79,32 +108,42 @@ public class MainActivity extends AppCompatActivity implements CreateStreamFragm
         AppController.getInstance().addToRequestQueue(request, "token_req");
 
 
-//        new AlertDialog.Builder(MainActivity.this)
-//                .setTitle("Share this with Client")
-//                .setMessage("Token :25632-25632 ")
-//
-//                .setCancelable(false)
-//                .setPositiveButton("continue", new DialogInterface.OnClickListener() {
-//                    @Override
-//                    public void onClick(DialogInterface dialog, int which) {
-////                        Intent i = new Intent(getApplicationContext(),Main2Activity.class);
-////                        startActivity(i);
-//                    }
-//                })
-//                .setNegativeButton("share via", new DialogInterface.OnClickListener() {
-//                    @Override
-//                    public void onClick(DialogInterface dialog, int which) {
-//                        Intent sharingIntent = new Intent(Intent.ACTION_SEND);
-//                        sharingIntent.setType("text/html");
-//                        sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, Html.fromHtml("<p>This is the text shared.</p>"));
-//                        startActivity(Intent.createChooser(sharingIntent,"Share using"));
-//                    }
-//                })
-//
-//                .show();
+
 
 
 
         }
+
+    public void displayTokenDialog(final String streamToken) {
+
+        /* TODO: after clicking on 'SHARE', the dialog shouldn't be closed. May be
+         * something other than AlertDialog
+         */
+        new AlertDialog.Builder(MainActivity.this)
+                .setTitle("Share this with Client")
+                .setMessage("Token :  " + streamToken)
+                .setCancelable(false)
+                .setPositiveButton("continue", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // replace current fragment with CameraPreviewFragment
+                        getSupportFragmentManager().beginTransaction()
+                                .replace(R.id.main_content_frame, CameraPreviewFragment.newInstance())
+                                .commit();
+                    }
+                })
+                .setNegativeButton("share", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Intent sharingIntent = new Intent(Intent.ACTION_SEND);
+                        sharingIntent.setType("text/plain");
+                        sharingIntent.putExtra(Intent.EXTRA_TEXT, "To view my live broadcast, use this token " + streamToken);
+                        startActivity(Intent.createChooser(sharingIntent,"Share using"));
+                    }
+                })
+
+                .show();
+
+    }
 
 }
