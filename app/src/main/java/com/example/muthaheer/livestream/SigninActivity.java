@@ -66,9 +66,9 @@ public class SigninActivity extends AppCompatActivity {
         }
 
         progressDialog = new ProgressDialog(SigninActivity.this,
-                R.style.AppTheme_Dark_Dialog);
+                ProgressDialog.STYLE_SPINNER);
         progressDialog.setIndeterminate(true);
-        progressDialog.setMessage("Authenticating...");
+        progressDialog.setMessage("Creating new profile...");
         progressDialog.show();
 
         final String name = _nameText.getText().toString();

@@ -14,7 +14,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="45dp"
-        android:layout_gravity="center_vertical"
+        android:layout_gravity="center"
+        android:id="@+id/create_stream_layout"
         android:background="@color/colorPrimary">
         <EditText
             android:hint="Enter a name"
@@ -41,7 +42,6 @@
             android:padding="10dp"
             android:id="@+id/create_stream_btn"
             />
-
     </RelativeLayout>
 
 </LinearLayout>

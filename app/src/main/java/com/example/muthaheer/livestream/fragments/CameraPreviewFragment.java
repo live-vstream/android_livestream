@@ -77,7 +77,7 @@ public class CameraPreviewFragment extends Fragment implements SurfaceHolder.Cal
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mConfig = new R5Configuration(R5StreamProtocol.RTSP, "192.168.43.219", 8554, "live", 1.0f);
+        mConfig = new R5Configuration(R5StreamProtocol.RTSP, "192.168.173..25", 8554, "live", 1.0f);
     }
 
     @Override

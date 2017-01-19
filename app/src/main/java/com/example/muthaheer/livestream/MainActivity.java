@@ -1,11 +1,14 @@
 package com.example.muthaheer.livestream;
 
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
@@ -29,6 +32,8 @@ public class MainActivity extends AppCompatActivity implements CreateStreamFragm
     FrameLayout mContentFrame;
     String mAuthToken;
     AppController mApp;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -118,7 +123,9 @@ public class MainActivity extends AppCompatActivity implements CreateStreamFragm
         /* TODO: after clicking on 'SHARE', the dialog shouldn't be closed. May be
          * something other than AlertDialog
          */
-        new AlertDialog.Builder(MainActivity.this)
+
+
+        AlertDialog dialog = new AlertDialog.Builder(MainActivity.this)
                 .setTitle("Share this with Client")
                 .setMessage("Token :  " + streamToken)
                 .setCancelable(false)
@@ -139,9 +146,13 @@ public class MainActivity extends AppCompatActivity implements CreateStreamFragm
                         sharingIntent.setType("text/plain");
                         sharingIntent.putExtra(Intent.EXTRA_TEXT, "To view my live broadcast, use this token " + streamToken);
                         startActivity(Intent.createChooser(sharingIntent,"Share using"));
+
+                        mApp.setCurrentStreamToken(streamToken);
+                        getSupportFragmentManager().beginTransaction()
+                                .replace(R.id.main_content_frame, CameraPreviewFragment.newInstance())
+                                .commit();
                     }
                 })
-
                 .show();
 
     }
@@ -151,5 +162,22 @@ public class MainActivity extends AppCompatActivity implements CreateStreamFragm
     @Override
     public void onBackPressed() {
         //super.onBackPressed();
+        AlertDialog dialog = new AlertDialog.Builder(MainActivity.this)
+                .setTitle("Do you really want to quit?")
+                .setMessage("Click Yes to quit \n No to cancel" )
+                .setCancelable(false)
+                .setPositiveButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                })
+                .setNegativeButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        finish();
+                    }
+                })
+                .show();
     }
 }
