@@ -77,7 +77,7 @@ public class CameraPreviewFragment extends Fragment implements SurfaceHolder.Cal
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mConfig = new R5Configuration(R5StreamProtocol.RTSP, "192.168.173..25", 8554, "live", 1.0f);
+        mConfig = new R5Configuration(R5StreamProtocol.RTSP, "192.168.0.101", 8554, "live", 1.0f);
     }
 
     @Override
@@ -104,6 +104,7 @@ public class CameraPreviewFragment extends Fragment implements SurfaceHolder.Cal
     }
 
     private void startStream() {
+
         mStream = new R5Stream(new R5Connection(mConfig));
         mStream.setLogLevel(R5Stream.LOG_LEVEL_DEBUG);
         mStream.connection.addListener(new R5ConnectionListener() {
@@ -141,6 +142,7 @@ public class CameraPreviewFragment extends Fragment implements SurfaceHolder.Cal
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
+                                mStartButton.setText("STOP");
                                 Toast.makeText(getActivity().getApplicationContext(),
                                         "You are now live! Token: " + mApp.getCurrentStreamToken(), Toast.LENGTH_LONG)
                                         .show();

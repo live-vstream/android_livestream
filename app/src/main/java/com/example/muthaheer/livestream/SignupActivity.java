@@ -75,7 +75,7 @@ public class SignupActivity extends AppCompatActivity {
         progressDialog = new ProgressDialog(SignupActivity.this,
                 ProgressDialog.STYLE_SPINNER);
         progressDialog.setIndeterminate(true);
-        progressDialog.setMessage("Authenticating...");
+        progressDialog.setMessage("Creating new profile..");
         progressDialog.show();
 
         final String name = _inputName.getText().toString();
