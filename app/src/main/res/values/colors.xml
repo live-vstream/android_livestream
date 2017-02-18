@@ -4,6 +4,9 @@
     <color name="colorPrimaryDark">#0288D1</color>
     <color name="colorAccent">#FF5722</color>
 
+    <color name="colorButtonStart">#43a047</color>
+    <color name="colorButtonStop">#d32f2f</color>
+
 
     <color name="black">#000000</color>
     <color name="jet">#222222</color>

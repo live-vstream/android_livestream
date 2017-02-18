@@ -1,17 +1,22 @@
 package com.example.muthaheer.livestream.fragments;
 
 
+import android.app.ActionBar;
 import android.content.Context;
 import android.hardware.Camera;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+
+import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.Toast;
 
@@ -58,6 +63,8 @@ public class CameraPreviewFragment extends Fragment implements SurfaceHolder.Cal
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_camera_preview, container, false);
+
+
     }
 
     @Override
@@ -78,6 +85,8 @@ public class CameraPreviewFragment extends Fragment implements SurfaceHolder.Cal
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mConfig = new R5Configuration(R5StreamProtocol.RTSP, "192.168.0.101", 8554, "live", 1.0f);
+        ((AppCompatActivity) getActivity()).getSupportActionBar().hide();
+
     }
 
     @Override
@@ -143,6 +152,7 @@ public class CameraPreviewFragment extends Fragment implements SurfaceHolder.Cal
                             @Override
                             public void run() {
                                 mStartButton.setText("STOP");
+                                mStartButton.setBackgroundResource(R.color.colorButtonStop);
                                 Toast.makeText(getActivity().getApplicationContext(),
                                         "You are now live! Token: " + mApp.getCurrentStreamToken(), Toast.LENGTH_LONG)
                                         .show();
