@@ -45,7 +45,15 @@ public class SigninActivity extends AppCompatActivity {
         _loginButton = (Button) findViewById(R.id.btn_signin);
 
         // Session manager
-        session = ((AppController) getApplicationContext()).getSessionManager();
+        session = new SessionManager(getApplicationContext());
+
+        // Check if user is already logged in or not
+        if (session.isLoggedIn()) {
+            // User is already logged in. Take him to main activity
+            Intent intent = new Intent(SigninActivity.this, MainActivity.class);
+            startActivity(intent);
+            finish();
+        }
 
         _loginButton.setOnClickListener(new View.OnClickListener() {
 
