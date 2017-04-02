@@ -84,7 +84,7 @@ public class CameraPreviewFragment extends Fragment implements SurfaceHolder.Cal
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mConfig = new R5Configuration(R5StreamProtocol.RTSP, "192.168.0.101", 8554, "live", 1.0f);
+        mConfig = new R5Configuration(R5StreamProtocol.RTSP, "35.162.41.238", 8554, "live", 1.0f);
         ((AppCompatActivity) getActivity()).getSupportActionBar().hide();
 
     }
@@ -160,7 +160,12 @@ public class CameraPreviewFragment extends Fragment implements SurfaceHolder.Cal
                         });
                         break;
                     case STOP_STREAMING:
+                        mStartButton.setText("ClOSE");
                         System.out.println("Stream Listener - Stopped Streaming");
+                        Toast.makeText(getActivity().getApplicationContext(),
+                                "You stopped Streaming ", Toast.LENGTH_LONG)
+                                .show();
+
                         break;
                     case CLOSE:
                         System.out.println("Stream Listener - Close");

@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 
 import com.example.muthaheer.livestream.R;
 
@@ -23,7 +24,7 @@ import com.example.muthaheer.livestream.R;
 public class CreateStreamFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
-    private Button mCreateButton;
+    private ImageButton mCreateButton;
     private EditText mStreamNameET;
 
     public CreateStreamFragment() {
@@ -43,16 +44,12 @@ public class CreateStreamFragment extends Fragment {
         if (getArguments() != null) {
 
         }
-
-
-
-
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        mCreateButton = (Button) view.findViewById(R.id.create_stream_btn);
+        mCreateButton = (ImageButton) view.findViewById(R.id.create_stream_btn);
         mStreamNameET = (EditText) view.findViewById(R.id.create_stream_name);
 
         mCreateButton.setOnClickListener(new View.OnClickListener() {

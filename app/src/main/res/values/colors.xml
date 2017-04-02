@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#03A9F4</color>
-    <color name="colorPrimaryDark">#0288D1</color>
+    <color name="colorPrimary">#03a9f4</color>
+    <color name="colorPrimaryDark">#0288d1</color>
     <color name="colorAccent">#FF5722</color>
 
     <color name="colorButtonStart">#43a047</color>
     <color name="colorButtonStop">#d32f2f</color>
 
 
-    <color name="black">#000000</color>
+    <color name="black">#fa1010</color>
     <color name="jet">#222222</color>
     <color name="oil">#333333</color>
     <color name="monsoon">#777777</color>
