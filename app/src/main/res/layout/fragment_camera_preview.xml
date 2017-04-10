@@ -17,14 +17,26 @@
 
     <Button
         android:id="@+id/publishButton"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@color/colorButtonStart"
-        android:textColor="@color/white"
-        android:text="start"
-        android:layout_marginBottom="0dp"
-        android:layout_alignParentBottom="false"
+        android:background="@android:drawable/radiobutton_off_background"
 
-        />
+        android:backgroundTint="@color/colorButtonStart"
+        android:text="start"
+        android:textColor="@color/white"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="14dp" />
+
+    <Button
+        android:id="@+id/cameraSwap"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:layout_alignBottom="@+id/publishButton"
+        android:layout_alignParentEnd="true"
+        android:background="@android:drawable/ic_menu_camera"
+        android:backgroundTint="@android:color/background_dark"
+        android:textColor="@color/white" />
 
 </RelativeLayout>

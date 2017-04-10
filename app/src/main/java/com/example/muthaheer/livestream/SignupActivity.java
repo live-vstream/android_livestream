@@ -29,7 +29,7 @@ public class SignupActivity extends AppCompatActivity {
     private static final String TAG = "Activity_SignUp";
     TextView _loginLink;
     Button _signUpButton;
-    EditText _inputName,_inputPassword;
+    EditText _inputFirstName,_inputPassword,_inputLastName,_inputEmail,_inputAddress,_inputEmpID;
 
     private SessionManager session;
     ProgressDialog progressDialog;
@@ -39,8 +39,13 @@ public class SignupActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity__sign_up);
 
-        _inputName=(EditText) findViewById(R.id.input_name);
+        _inputFirstName=(EditText) findViewById(R.id.input_first_name);
         _inputPassword=(EditText) findViewById(R.id.input_password);
+        _inputLastName=(EditText) findViewById(R.id.input_last_name);
+        _inputAddress=(EditText) findViewById(R.id.input_address);
+        _inputEmail=(EditText) findViewById(R.id.input_email);
+        _inputEmpID=(EditText) findViewById(R.id.input_emp_id);
+
 
         _loginLink = (TextView) findViewById(R.id.link_login);
         _loginLink.setOnClickListener(new View.OnClickListener() {
@@ -78,7 +83,7 @@ public class SignupActivity extends AppCompatActivity {
         progressDialog.setMessage("Creating new profile..");
         progressDialog.show();
 
-        final String name = _inputName.getText().toString();
+        final String name = _inputFirstName.getText().toString();
         final String password = _inputPassword.getText().toString();
 
 
@@ -99,14 +104,14 @@ public class SignupActivity extends AppCompatActivity {
     public boolean validate() {
         boolean valid = true;
 
-        String name = _inputName.getText().toString();
+        String name = _inputFirstName.getText().toString();
         String password = _inputPassword.getText().toString();
 
         if (name.isEmpty()) {
-            _inputName.setError("Enter a valid Name");
+            _inputFirstName.setError("Enter a valid Name");
             valid = false;
         } else {
-            _inputName.setError(null);
+            _inputFirstName.setError(null);
         }
 
         if (password.isEmpty() || password.length() < 4) {
