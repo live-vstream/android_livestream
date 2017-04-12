@@ -27,7 +27,7 @@ import java.util.Map;
 public class SigninActivity extends AppCompatActivity {
     private static final String TAG = "Activity_signin";
 
-    EditText _nameText;
+    EditText _emailText;
     EditText _passwordText;
     Button _loginButton;
 
@@ -40,7 +40,7 @@ public class SigninActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signin);
 
-        _nameText = (EditText) findViewById(R.id.input_name);
+        _emailText = (EditText) findViewById(R.id.input_email);
         _passwordText = (EditText) findViewById(R.id.input_password);
         _loginButton = (Button) findViewById(R.id.btn_signin);
 
@@ -79,11 +79,11 @@ public class SigninActivity extends AppCompatActivity {
         progressDialog.setMessage("Authenticating...");
         progressDialog.show();
 
-        final String name = _nameText.getText().toString();
+        final String email = _emailText.getText().toString();
         final String password = _passwordText.getText().toString();
 
 
-        checkLogin(name, password);
+        checkLogin(email, password);
 
     }
 
@@ -106,14 +106,14 @@ public class SigninActivity extends AppCompatActivity {
     public boolean validate() {
         boolean valid = true;
 
-        String name = _nameText.getText().toString();
+        String email = _emailText.getText().toString();
         String password = _passwordText.getText().toString();
 
-        if (name.isEmpty()) {
-            _nameText.setError("Enter a valid Name");
+        if (email.isEmpty()) {
+            _emailText.setError("Enter a valid Email-ID");
             valid = false;
         } else {
-            _nameText.setError(null);
+            _emailText.setError(null);
         }
 
         if (password.isEmpty() || password.length() < 4) {
@@ -129,7 +129,7 @@ public class SigninActivity extends AppCompatActivity {
     /**
      * function to verify login details
      */
-    private void checkLogin(final String name, final String password) {
+    private void checkLogin(final String email, final String password) {
         // Tag used to cancel the request
         String tag_string_req = "req_login";
 
@@ -143,10 +143,7 @@ public class SigninActivity extends AppCompatActivity {
                 progressDialog.dismiss();
                 try {
                     JSONObject jObj = new JSONObject(response);
-                    boolean success = jObj.getBoolean("success");
 
-                    // Check for error node in json
-                    if (success) {
                         String authToken = jObj.getString("token");
                         // on success, we get a token as a reponse, so save it!
                         session.setLogin(true, authToken);
@@ -156,12 +153,7 @@ public class SigninActivity extends AppCompatActivity {
                                 MainActivity.class);
                         startActivity(intent);
                         finish();
-                    } else {
-                        // Error in login. Get the error message
-                        String errorMsg = jObj.getString("msg");
-                        Toast.makeText(getApplicationContext(),
-                                errorMsg, Toast.LENGTH_LONG).show();
-                    }
+
                 } catch (JSONException e) {
                     // JSON error
                     e.printStackTrace();
@@ -184,7 +176,7 @@ public class SigninActivity extends AppCompatActivity {
             protected Map<String, String> getParams() {
                 // Posting parameters to login url
                 Map<String, String> params = new HashMap<String, String>();
-                params.put("name", name);
+                params.put("email", email);
                 params.put("password", password);
 
                 return params;

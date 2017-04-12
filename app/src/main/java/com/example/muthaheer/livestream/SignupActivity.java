@@ -29,7 +29,7 @@ public class SignupActivity extends AppCompatActivity {
     private static final String TAG = "Activity_SignUp";
     TextView _loginLink;
     Button _signUpButton;
-    EditText _inputFirstName,_inputPassword,_inputLastName,_inputEmail,_inputAddress,_inputEmpID;
+    EditText _inputFirstName,_inputPassword,_inputLastName,_inputEmail,_inputAddress,_inputEmpID,_inputRole;
 
     private SessionManager session;
     ProgressDialog progressDialog;
@@ -40,12 +40,14 @@ public class SignupActivity extends AppCompatActivity {
         setContentView(R.layout.activity__sign_up);
 
         _inputFirstName=(EditText) findViewById(R.id.input_first_name);
-        _inputPassword=(EditText) findViewById(R.id.input_password);
         _inputLastName=(EditText) findViewById(R.id.input_last_name);
-        _inputAddress=(EditText) findViewById(R.id.input_address);
         _inputEmail=(EditText) findViewById(R.id.input_email);
-        _inputEmpID=(EditText) findViewById(R.id.input_emp_id);
+        _inputRole=(EditText) findViewById(R.id.input_role);
+        _inputPassword=(EditText) findViewById(R.id.input_password);
 
+        /*_inputAddress=(EditText) findViewById(R.id.input_address);
+        _inputEmpID=(EditText) findViewById(R.id.input_emp_id);
+        */
 
         _loginLink = (TextView) findViewById(R.id.link_login);
         _loginLink.setOnClickListener(new View.OnClickListener() {
@@ -83,12 +85,15 @@ public class SignupActivity extends AppCompatActivity {
         progressDialog.setMessage("Creating new profile..");
         progressDialog.show();
 
-        final String name = _inputFirstName.getText().toString();
+        final String first_name = _inputFirstName.getText().toString();
+        final String last_name = _inputLastName.getText().toString();
+        final String email = _inputEmail.getText().toString();
+        final String role = _inputRole.getText().toString();
         final String password = _inputPassword.getText().toString();
 
 
 
-        checkSignup(name, password);
+        checkSignup(first_name,last_name,email,role, password);
 
     }
 
@@ -96,7 +101,7 @@ public class SignupActivity extends AppCompatActivity {
 
 
     public void onSignupFailed() {
-        Toast.makeText(getBaseContext(), "Login failed", Toast.LENGTH_LONG).show();
+        Toast.makeText(getBaseContext(), "SignUp failed", Toast.LENGTH_LONG).show();
 
         _signUpButton.setEnabled(true);
     }
@@ -104,14 +109,38 @@ public class SignupActivity extends AppCompatActivity {
     public boolean validate() {
         boolean valid = true;
 
-        String name = _inputFirstName.getText().toString();
+        String first_name = _inputFirstName.getText().toString();
+        String last_name = _inputLastName.getText().toString();
+        String email = _inputEmail.getText().toString();
+        String role = _inputRole.getText().toString();
         String password = _inputPassword.getText().toString();
 
-        if (name.isEmpty()) {
-            _inputFirstName.setError("Enter a valid Name");
+        if (first_name.isEmpty()) {
+            _inputFirstName.setError("Enter a valid First Name");
             valid = false;
         } else {
             _inputFirstName.setError(null);
+        }
+
+        if (last_name.isEmpty()) {
+            _inputLastName.setError("Enter a valid Last Name");
+            valid = false;
+        } else {
+            _inputLastName.setError(null);
+        }
+
+        if (email.isEmpty()) {
+            _inputEmail.setError("Enter a valid Email-ID");
+            valid = false;
+        } else {
+            _inputEmail.setError(null);
+        }
+
+        if (role.isEmpty()) {
+            _inputRole.setError("Enter a valid Role");
+            valid = false;
+        } else {
+            _inputRole.setError(null);
         }
 
         if (password.isEmpty() || password.length() < 4) {
@@ -124,7 +153,7 @@ public class SignupActivity extends AppCompatActivity {
         return valid;
     }
 
-    private void checkSignup(final String name, final String password) {
+    private void checkSignup(final String first_name,final String last_name,final String email,final String role, final String password) {
         // Tag used to cancel the request
         String tag_string_req = "req_signup";
 
@@ -138,27 +167,13 @@ public class SignupActivity extends AppCompatActivity {
                 progressDialog.dismiss();
                 try {
                     JSONObject jObj = new JSONObject(response);
-                    boolean success = jObj.getBoolean("success");
-
-                    // Check for error node in json
-                    if (success) {
-                        session.setLogin(true);
-                        String successMsg = jObj.getString("msg");
-                        Toast.makeText(getApplicationContext(),
-                                successMsg, Toast.LENGTH_LONG).show();
 
                         // Launch signin activity
                         Intent intent = new Intent(SignupActivity.this,
                                 SigninActivity.class);
                         startActivity(intent);
                         finish();
-                    }
-                    else {
-                        // Error in Signup. Get the error message
-                        String errorMsg = jObj.getString("msg");
-                        Toast.makeText(getApplicationContext(),
-                                errorMsg, Toast.LENGTH_LONG).show();
-                    }
+
                 } catch (JSONException e) {
                     // JSON error
                     e.printStackTrace();
@@ -181,7 +196,10 @@ public class SignupActivity extends AppCompatActivity {
             protected Map<String, String> getParams() {
                 // Posting parameters to login url
                 Map<String, String> params = new HashMap<String, String>();
-                params.put("name", name);
+                params.put("firstName", first_name);
+                params.put("lastName", last_name);
+                params.put("email", email);
+                params.put("role", role);
                 params.put("password", password);
 
                 return params;
