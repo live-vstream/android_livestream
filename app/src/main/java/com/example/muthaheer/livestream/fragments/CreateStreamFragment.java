@@ -26,7 +26,7 @@ public class CreateStreamFragment extends Fragment {
     private OnFragmentInteractionListener mListener;
     private ImageButton mCreateButton;
     private EditText mStreamNameET;
-
+    private String mStreamToken;
     public CreateStreamFragment() {
         // Required empty public constructor
     }
@@ -56,7 +56,8 @@ public class CreateStreamFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 if(mListener != null) {
-                    mListener.onFragmentInteraction(mStreamNameET.getText().toString());
+                    mStreamToken="ijkln";
+                    mListener.onFragmentInteraction(mStreamNameET.getText().toString(), mStreamToken);
                 }
             }
         });
@@ -99,6 +100,6 @@ public class CreateStreamFragment extends Fragment {
      */
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
-        void onFragmentInteraction(String streamName);
+        void onFragmentInteraction(String streamName,String streamToken);
     }
 }

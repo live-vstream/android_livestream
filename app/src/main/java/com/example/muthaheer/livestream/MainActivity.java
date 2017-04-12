@@ -52,7 +52,7 @@ public class MainActivity extends AppCompatActivity implements CreateStreamFragm
     }
 
     @Override
-    public void onFragmentInteraction(final String streamName) {
+    public void onFragmentInteraction(final String streamName,final String streamToken) {
 
         final ProgressDialog requestTokenProgress;
         requestTokenProgress = new ProgressDialog(MainActivity.this, ProgressDialog.STYLE_SPINNER);
@@ -68,14 +68,10 @@ public class MainActivity extends AppCompatActivity implements CreateStreamFragm
                         requestTokenProgress.hide();
                         try {
                             JSONObject resJson = new JSONObject(response);
-                            boolean success = resJson.getBoolean("success");
-                            if(success) {
-                                String streamToken = resJson.getString("token");
+                            //boolean success = resJson.getBoolean("success");
+                                String streamToken = resJson.getString("streamToken");
 
                                 displayTokenDialog(streamToken);
-                            } else {
-                                Toast.makeText(MainActivity.this, resJson.getString("msg"), Toast.LENGTH_SHORT).show();
-                            }
 
 
                         } catch (JSONException e) {
@@ -94,7 +90,9 @@ public class MainActivity extends AppCompatActivity implements CreateStreamFragm
             protected Map<String, String> getParams() {
                 // Posting parameters to login url
                 Map<String, String> params = new HashMap<String, String>();
-                params.put("name", streamName);
+                params.put("token",streamToken);
+                params.put("title", streamName);
+
 
                 return params;
             }
