@@ -60,7 +60,7 @@ public class HomeActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-
+        session = new SessionManager(getApplicationContext());
         mApp = (AppController) getApplicationContext();
 
         mAuthToken = mApp.getSessionManager().getAuthToken();
@@ -119,7 +119,6 @@ public class HomeActivity extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         if(id == R.id.action_signout) {
-
             AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
             dialogBuilder.setTitle("Live Stream")
                     .setMessage("Are you sure you want to logout?");
@@ -303,7 +302,8 @@ public class HomeActivity extends AppCompatActivity
         session.setLogin(false);
 
         progressDialog.dismiss();
-        recreate();
+        Intent i = new Intent(getApplicationContext(),SigninActivity.class);
+        startActivity(i);
         Toast.makeText(this, "Logged out successfully!", Toast.LENGTH_LONG).show();
     }
 
