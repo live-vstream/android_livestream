@@ -22,6 +22,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
 import android.widget.Switch;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -33,6 +34,7 @@ import com.example.muthaheer.livestream.fragments.AboutUsFragment;
 import com.example.muthaheer.livestream.fragments.CameraPreviewFragment;
 import com.example.muthaheer.livestream.fragments.ContactUsFragment;
 import com.example.muthaheer.livestream.fragments.CreateStreamFragment;
+import com.example.muthaheer.livestream.helper.SessionManager;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -50,6 +52,8 @@ public class HomeActivity extends AppCompatActivity
     Toolbar toolbar;
     ActionBarDrawerToggle toggle;
     DrawerLayout drawer;
+
+    private SessionManager session;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -113,6 +117,28 @@ public class HomeActivity extends AppCompatActivity
             return true;
         }
 
+        //noinspection SimplifiableIfStatement
+        if(id == R.id.action_signout) {
+
+            AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
+            dialogBuilder.setTitle("Live Stream")
+                    .setMessage("Are you sure you want to logout?");
+            dialogBuilder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    logoutUser();
+                }
+            })
+                    .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                        }
+                    });
+            AlertDialog alertDialog = dialogBuilder.create();
+            alertDialog.show();
+            return true;
+        }
         return super.onOptionsItemSelected(item);
     }
 
@@ -267,6 +293,18 @@ public class HomeActivity extends AppCompatActivity
                 })
                 .show();
 
+    }
+
+    private void logoutUser() {
+        ProgressDialog progressDialog = new ProgressDialog(this, ProgressDialog.STYLE_SPINNER);
+        progressDialog.setMessage("Logging out...");
+        progressDialog.setTitle("Please wait");
+        progressDialog.show();
+        session.setLogin(false);
+
+        progressDialog.dismiss();
+        recreate();
+        Toast.makeText(this, "Logged out successfully!", Toast.LENGTH_LONG).show();
     }
 
 

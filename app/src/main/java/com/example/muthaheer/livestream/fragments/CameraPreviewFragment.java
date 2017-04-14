@@ -85,7 +85,6 @@ public class CameraPreviewFragment extends Fragment implements SurfaceHolder.Cal
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mConfig = new R5Configuration(R5StreamProtocol.RTSP, "192.168.0.101", 8554, "live", 1.0f);
-        ((AppCompatActivity) getActivity()).getSupportActionBar().hide();
 
     }
 

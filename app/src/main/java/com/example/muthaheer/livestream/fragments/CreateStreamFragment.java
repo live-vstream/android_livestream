@@ -13,6 +13,10 @@ import android.widget.ImageButton;
 
 import com.example.muthaheer.livestream.R;
 
+import java.security.SecureRandom;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
@@ -56,7 +60,7 @@ public class CreateStreamFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 if(mListener != null) {
-                    mStreamToken="ijkln";
+                    mStreamToken=generateToken();
                     mListener.onFragmentInteraction(mStreamNameET.getText().toString(), mStreamToken);
                 }
             }
@@ -101,5 +105,18 @@ public class CreateStreamFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(String streamName,String streamToken);
+    }
+
+    public String generateToken(){
+        char[] chars = "abcdefghijklmnopqrstuvwxyz".toCharArray();
+        StringBuilder sb = new StringBuilder();
+        SecureRandom random = new SecureRandom();
+        for (int i = 0; i < 6; i++) {
+            char c = chars[random.nextInt(chars.length)];
+            sb.append(c);
+        }
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar.getInstance().getTime());
+        String token=""+timeStamp+sb.toString();
+        return(token);
     }
 }
