@@ -247,7 +247,7 @@ public class HomeActivity extends AppCompatActivity
                         // replace current fragment with CameraPreviewFragment
                         mApp.setCurrentStreamToken(streamToken);
                         getSupportFragmentManager().beginTransaction()
-                                .replace(R.id.main_content_frame, CameraPreviewFragment.newInstance())
+                                .replace(R.id.fragment_content, CameraPreviewFragment.newInstance())
                                 .commit();
                     }
                 })
@@ -261,7 +261,7 @@ public class HomeActivity extends AppCompatActivity
 
                         mApp.setCurrentStreamToken(streamToken);
                         getSupportFragmentManager().beginTransaction()
-                                .replace(R.id.main_content_frame, CameraPreviewFragment.newInstance())
+                                .replace(R.id.fragment_content, CameraPreviewFragment.newInstance())
                                 .commit();
                     }
                 })

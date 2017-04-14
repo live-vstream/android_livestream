@@ -50,7 +50,7 @@ public class SigninActivity extends AppCompatActivity {
         // Check if user is already logged in or not
         if (session.isLoggedIn()) {
             // User is already logged in. Take him to main activity
-            Intent intent = new Intent(SigninActivity.this, MainActivity.class);
+            Intent intent = new Intent(SigninActivity.this, HomeActivity.class);
             startActivity(intent);
             finish();
         }
