@@ -150,7 +150,7 @@ public class SigninActivity extends AppCompatActivity {
 
                         // Launch main drawer activity
                         Intent intent = new Intent(SigninActivity.this,
-                                MainActivity.class);
+                                HomeActivity.class);
                         startActivity(intent);
                         finish();
 

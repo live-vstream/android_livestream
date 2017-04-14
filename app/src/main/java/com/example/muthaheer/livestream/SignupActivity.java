@@ -170,7 +170,7 @@ public class SignupActivity extends AppCompatActivity {
 
                         // Launch signin activity
                         Intent intent = new Intent(SignupActivity.this,
-                                SigninActivity.class);
+                                HomeActivity.class);
                         startActivity(intent);
                         finish();
 
