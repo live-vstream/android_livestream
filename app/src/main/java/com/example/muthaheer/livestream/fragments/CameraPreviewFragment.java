@@ -18,6 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.muthaheer.livestream.R;
@@ -42,7 +43,7 @@ public class CameraPreviewFragment extends Fragment implements SurfaceHolder.Cal
     private Camera mCamera;
     private SurfaceView mCameraView;
     private Button mStartButton;
-
+    private TextView mTokenID;
     private R5Stream mStream;
     private R5Configuration mConfig;
 
@@ -85,7 +86,6 @@ public class CameraPreviewFragment extends Fragment implements SurfaceHolder.Cal
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mConfig = new R5Configuration(R5StreamProtocol.RTSP, "192.168.0.101", 8554, "live", 1.0f);
-
     }
 
     @Override
@@ -94,6 +94,10 @@ public class CameraPreviewFragment extends Fragment implements SurfaceHolder.Cal
 
         mStartButton = (Button) getActivity().findViewById(R.id.publishButton);
         mCameraView = (SurfaceView) getActivity().findViewById(R.id.surfaceView);
+
+        mTokenID=(TextView) getActivity().findViewById(R.id.tokenID);
+
+        mTokenID.setText("Token : "+mApp.getCurrentStreamToken());
 
         mStartButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -150,8 +154,8 @@ public class CameraPreviewFragment extends Fragment implements SurfaceHolder.Cal
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                mStartButton.setText("STOP");
-                                mStartButton.setBackgroundResource(R.color.colorButtonStop);
+
+                                mStartButton.setBackgroundResource(R.mipmap.ic_stop_stream);
                                 Toast.makeText(getActivity().getApplicationContext(),
                                         "You are now live! Token: " + mApp.getCurrentStreamToken(), Toast.LENGTH_LONG)
                                         .show();
@@ -159,7 +163,6 @@ public class CameraPreviewFragment extends Fragment implements SurfaceHolder.Cal
                         });
                         break;
                     case STOP_STREAMING:
-                        mStartButton.setText("ClOSE");
                         System.out.println("Stream Listener - Stopped Streaming");
                         Toast.makeText(getActivity().getApplicationContext(),
                                 "You stopped Streaming ", Toast.LENGTH_LONG)
@@ -184,7 +187,7 @@ public class CameraPreviewFragment extends Fragment implements SurfaceHolder.Cal
         R5Microphone r5Microphone = new R5Microphone();
         mStream.attachCamera(r5Camera);
         mStream.attachMic(r5Microphone);
-        mStream.publish(mApp.getCurrentStreamToken(), R5Stream.RecordType.Live);
+        mStream.publish(mApp.getCurrentStreamToken(), R5Stream.RecordType.Record);
         mCamera.startPreview();
     }
 

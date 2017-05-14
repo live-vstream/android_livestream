@@ -302,7 +302,7 @@ public class HomeActivity extends AppCompatActivity
         session.setLogin(false);
 
         progressDialog.dismiss();
-        Intent i = new Intent(getApplicationContext(),SigninActivity.class);
+        Intent i = new Intent(getApplicationContext(),SignupActivity.class);
         startActivity(i);
         Toast.makeText(this, "Logged out successfully!", Toast.LENGTH_LONG).show();
     }

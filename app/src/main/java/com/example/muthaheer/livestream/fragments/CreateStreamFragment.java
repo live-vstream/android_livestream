@@ -115,7 +115,7 @@ public class CreateStreamFragment extends Fragment {
             char c = chars[random.nextInt(chars.length)];
             sb.append(c);
         }
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar.getInstance().getTime());
+        String timeStamp = new SimpleDateFormat("MMddHHmmss").format(Calendar.getInstance().getTime());
         String token=""+timeStamp+sb.toString();
         return(token);
     }
