@@ -1,26 +1,22 @@
 package com.example.muthaheer.livestream.fragments;
 
 
-import android.app.ActionBar;
 import android.content.Context;
 import android.hardware.Camera;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-
-import android.support.v7.app.ActionBarActivity;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.widget.Button;
 import android.widget.Toast;
 
 import com.example.muthaheer.livestream.R;
+import com.example.muthaheer.livestream.app.AppConfig;
 import com.example.muthaheer.livestream.app.AppController;
 import com.red5pro.streaming.R5Connection;
 import com.red5pro.streaming.R5Stream;
@@ -84,7 +80,7 @@ public class CameraPreviewFragment extends Fragment implements SurfaceHolder.Cal
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mConfig = new R5Configuration(R5StreamProtocol.RTSP, "192.168.0.101", 8554, "live", 1.0f);
+        mConfig = new R5Configuration(R5StreamProtocol.RTSP, AppConfig.RED5_SERVER_HOST, 8554, "live", 1.0f);
 
     }
 

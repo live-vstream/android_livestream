@@ -77,6 +77,7 @@ public class SigninActivity extends AppCompatActivity {
                 ProgressDialog.STYLE_SPINNER);
         progressDialog.setIndeterminate(true);
         progressDialog.setMessage("Authenticating...");
+        progressDialog.setCancelable(false);
         progressDialog.show();
 
         final String email = _emailText.getText().toString();
@@ -143,16 +144,18 @@ public class SigninActivity extends AppCompatActivity {
                 progressDialog.dismiss();
                 try {
                     JSONObject jObj = new JSONObject(response);
+                    JSONObject userJobj = jObj.getJSONObject("user");
 
-                        String authToken = jObj.getString("token");
-                        // on success, we get a token as a reponse, so save it!
-                        session.setLogin(true, authToken);
+                    String authToken = jObj.getString("token");
 
-                        // Launch main drawer activity
-                        Intent intent = new Intent(SigninActivity.this,
-                                HomeActivity.class);
-                        startActivity(intent);
-                        finish();
+                    // on success, we get a token as a reponse, so save it!
+                    session.setLogin(true, authToken, userJobj);
+
+                    // Launch main drawer activity
+                    Intent intent = new Intent(SigninActivity.this,
+                            HomeActivity.class);
+                    startActivity(intent);
+                    finish();
 
                 } catch (JSONException e) {
                     // JSON error
@@ -165,6 +168,7 @@ public class SigninActivity extends AppCompatActivity {
 
             @Override
             public void onErrorResponse(VolleyError error) {
+                progressDialog.dismiss();
                 Log.e(TAG, "Login Error: " + error.getMessage());
                 Toast.makeText(getApplicationContext(),
                         error.getMessage(), Toast.LENGTH_LONG).show();

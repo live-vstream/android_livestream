@@ -7,13 +7,15 @@ import android.app.Application;
  */
 
 public class AppConfig extends Application {
-    public static String URL_SERVER = "http://192.168.43.219:4300/api/";
+    public static String URL_SERVER = "http://192.168.43.219:3000/api/";
     // Server user login url
-    public static String URL_LOGIN = URL_SERVER + "user/authenticate";
+    public static String URL_LOGIN = URL_SERVER + "auth/login";
     // Server user signup url
-    public static String URL_SIGNUP = URL_SERVER + "user/signup";
+    public static String URL_SIGNUP = URL_SERVER + "auth/register";
 
     public static String URL_GETTOKEN = URL_SERVER + "stream";
+
+    public static String RED5_SERVER_HOST = "192.168.43.219";
 
 
 

@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
 
+import org.json.JSONObject;
+
 /**
  * Created by muthaheer on 25/12/16.
  */
@@ -26,6 +28,7 @@ public class SessionManager {
 
     private static final String KEY_IS_LOGGED_IN = "isLoggedIn";
     private static final String KEY_AUTH_TOKEN = "authtoken";
+    private UserInfo currentUser;
 
     public SessionManager(Context context) {
         this._context = context;
@@ -39,6 +42,7 @@ public class SessionManager {
 
         if(!isLoggedIn) {
             editor.remove(KEY_AUTH_TOKEN);
+            currentUser = null;
         }
 
         // commit changes
@@ -62,11 +66,31 @@ public class SessionManager {
         Log.d(TAG, "User login session modified!");
     }
 
+    public void setLogin(boolean isLoggedIn, String authToken, JSONObject userJobj) {
+
+
+        editor.putBoolean(KEY_IS_LOGGED_IN, isLoggedIn);
+
+        if(isLoggedIn) {
+            editor.putString(KEY_AUTH_TOKEN, authToken);
+            currentUser = new UserInfo(userJobj);
+        }
+
+        // commit changes
+        editor.commit();
+
+        Log.d(TAG, "User login session modified!");
+    }
+
     public boolean isLoggedIn(){
         return pref.getBoolean(KEY_IS_LOGGED_IN, false);
     }
 
     public String getAuthToken() {
         return pref.getString(KEY_AUTH_TOKEN, null);
+    }
+
+    public UserInfo getCurrentUser() {
+        return currentUser;
     }
 }
