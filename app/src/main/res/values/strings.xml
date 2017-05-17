@@ -10,4 +10,7 @@
 
     <string name="action_settings">Settings</string>
     <string name="action_signout">Sign Out</string>
+
+    <string name="about_us_intro_1">Streaming video is content sent in compressed form over the Internet and displayed by the viewer in real time. With streaming video or streaming media, a Web user does not have to wait to download a file to play it. Instead, the media is sent in a continuous stream of data and is played as it arrives.</string>
+    <string name="about_us_intro_2">Livestream provided a high-level solution for us to stream our daily opening and closing bell, along with investor meetings for key personnel to view who can’t be there in person.</string>
 </resources>

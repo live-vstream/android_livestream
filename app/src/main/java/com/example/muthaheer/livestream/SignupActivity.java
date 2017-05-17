@@ -29,7 +29,7 @@ public class SignupActivity extends AppCompatActivity {
     private static final String TAG = "Activity_SignUp";
     TextView _loginLink;
     Button _signUpButton;
-    EditText _inputFirstName,_inputPassword,_inputLastName,_inputEmail,_inputAddress,_inputEmpID,_inputRole;
+    EditText _inputFirstName,_inputPassword,_inputLastName,_inputEmail,_inputAddress,_inputEmpID;
 
     private SessionManager session;
     ProgressDialog progressDialog;
@@ -42,7 +42,6 @@ public class SignupActivity extends AppCompatActivity {
         _inputFirstName=(EditText) findViewById(R.id.input_first_name);
         _inputLastName=(EditText) findViewById(R.id.input_last_name);
         _inputEmail=(EditText) findViewById(R.id.input_email);
-        _inputRole=(EditText) findViewById(R.id.input_role);
         _inputPassword=(EditText) findViewById(R.id.input_password);
 
         /*_inputAddress=(EditText) findViewById(R.id.input_address);
@@ -88,12 +87,11 @@ public class SignupActivity extends AppCompatActivity {
         final String first_name = _inputFirstName.getText().toString();
         final String last_name = _inputLastName.getText().toString();
         final String email = _inputEmail.getText().toString();
-        final String role = _inputRole.getText().toString();
         final String password = _inputPassword.getText().toString();
 
 
 
-        checkSignup(first_name,last_name,email,role, password);
+        checkSignup(first_name,last_name,email, password);
 
     }
 
@@ -112,7 +110,6 @@ public class SignupActivity extends AppCompatActivity {
         String first_name = _inputFirstName.getText().toString();
         String last_name = _inputLastName.getText().toString();
         String email = _inputEmail.getText().toString();
-        String role = _inputRole.getText().toString();
         String password = _inputPassword.getText().toString();
 
         if (first_name.isEmpty()) {
@@ -136,12 +133,6 @@ public class SignupActivity extends AppCompatActivity {
             _inputEmail.setError(null);
         }
 
-        if (role.isEmpty()) {
-            _inputRole.setError("Enter a valid Role");
-            valid = false;
-        } else {
-            _inputRole.setError(null);
-        }
 
         if (password.isEmpty() || password.length() < 4) {
             _inputPassword.setError("Password length must be > 4");
@@ -153,7 +144,7 @@ public class SignupActivity extends AppCompatActivity {
         return valid;
     }
 
-    private void checkSignup(final String first_name,final String last_name,final String email,final String role, final String password) {
+    private void checkSignup(final String first_name,final String last_name,final String email, final String password) {
         // Tag used to cancel the request
         String tag_string_req = "req_signup";
 
@@ -199,7 +190,7 @@ public class SignupActivity extends AppCompatActivity {
                 params.put("firstName", first_name);
                 params.put("lastName", last_name);
                 params.put("email", email);
-                params.put("role", role);
+                params.put("role", "Client");
                 params.put("password", password);
 
                 return params;
