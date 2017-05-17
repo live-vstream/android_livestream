@@ -4,33 +4,13 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.Toast;
 
-import com.android.volley.AuthFailureError;
-import com.android.volley.Request;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
 import com.example.muthaheer.livestream.R;
-import com.example.muthaheer.livestream.app.AppConfig;
-import com.example.muthaheer.livestream.app.AppController;
-import com.example.muthaheer.livestream.helper.SessionManager;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.security.SecureRandom;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -47,8 +27,7 @@ public class CreateStreamFragment extends Fragment {
     private EditText mStreamNameET;
     private String mStreamToken;
 
-    private SessionManager sm;
-    private AppController mApp;
+
     public CreateStreamFragment() {
         // Required empty public constructor
     }
@@ -63,8 +42,6 @@ public class CreateStreamFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mApp = (AppController) getActivity().getApplicationContext();
-        sm = mApp.getSessionManager();
         if (getArguments() != null) {
 
         }
@@ -80,7 +57,7 @@ public class CreateStreamFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 if(mListener != null) {
-                    createStream();
+                    mListener.onFragmentInteraction(mStreamNameET.getText().toString());
                 }
             }
         });
@@ -123,85 +100,8 @@ public class CreateStreamFragment extends Fragment {
      */
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
-        void onFragmentInteraction(String streamName,String streamToken);
+        void onFragmentInteraction(String streamNamen);
     }
 
-    public String generateToken(){
-        char[] chars = "abcdefghijklmnopqrstuvwxyz".toCharArray();
-        StringBuilder sb = new StringBuilder();
-        SecureRandom random = new SecureRandom();
-        for (int i = 0; i < 6; i++) {
-            char c = chars[random.nextInt(chars.length)];
-            sb.append(c);
-        }
-        String timeStamp = new SimpleDateFormat("MMddHHmmss").format(Calendar.getInstance().getTime());
-        String token=""+timeStamp+sb.toString();
-        return(token);
-    }
 
-    public void createStream() {
-        StringRequest req = new StringRequest(Request.Method.POST, AppConfig.URL_GETTOKEN, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-
-                try {
-                    JSONObject resJson = new JSONObject(response);
-                    String msg = resJson.getString("message");
-                    JSONObject stream = resJson.getJSONObject("stream");
-                    JSONArray tokens = stream.getJSONArray("tokens");
-                    JSONObject firstToken = tokens.getJSONObject(0);
-                    mStreamToken = firstToken.getString("value");
-
-
-
-                    mListener.onFragmentInteraction(mStreamNameET.getText().toString(), mStreamToken);
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
-            }
-        },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(getContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
-                        Log.d("Create stream" , "volley response error: " + error.getLocalizedMessage());
-
-                    }
-                }
-        ) {
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> params = new HashMap<String, String>();
-                params.put("Authorization", sm.getAuthToken());
-                //params.put("title", mStreamNameET.getText().toString());
-                Log.d("Create stream", "Auth: " + sm.getAuthToken());
-
-                return params;
-            }
-
-            @Override
-            public String getBodyContentType() {
-                return "application/json";
-            }
-
-            @Override
-            public byte[] getBody() throws AuthFailureError {
-                JSONObject jsonBody = new JSONObject();
-                String body="";
-                try {
-                    jsonBody.put("title", mStreamNameET.getText().toString());
-                    body = jsonBody.toString();
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                return body.getBytes();
-            }
-        };
-
-        mApp.addToRequestQueue(req, "stream_create");
-
-
-    }
 }

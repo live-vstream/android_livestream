@@ -81,7 +81,7 @@ public class CameraPreviewFragment extends Fragment implements SurfaceHolder.Cal
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mConfig = new R5Configuration(R5StreamProtocol.RTSP, "192.168.0.101", 8554, "live", 1.0f);
+        mConfig = new R5Configuration(R5StreamProtocol.RTSP, AppConfig.RED5_SERVER_HOST, 8554, "live", 1.0f);
 
     }
 
@@ -184,7 +184,7 @@ public class CameraPreviewFragment extends Fragment implements SurfaceHolder.Cal
         R5Microphone r5Microphone = new R5Microphone();
         mStream.attachCamera(r5Camera);
         mStream.attachMic(r5Microphone);
-        mStream.publish(mApp.getCurrentStreamToken(), R5Stream.RecordType.Record);
+        mStream.publish(mApp.getCurrentStreamFileName(), R5Stream.RecordType.Record);
         mCamera.startPreview();
     }
 

@@ -21,6 +21,17 @@ public class AppController extends Application{
 
     private SessionManager mSessionManager;
     private String mCurrentStreamToken;
+    private String mCurrentStreamFileName;
+
+    public String getCurrentStreamFileName() {
+        return mCurrentStreamFileName;
+    }
+
+    public void setCurrentStreamFileName(String mCurrentStreamFileName) {
+        this.mCurrentStreamFileName = mCurrentStreamFileName;
+    }
+
+
 
     @Override
     public void onCreate() {

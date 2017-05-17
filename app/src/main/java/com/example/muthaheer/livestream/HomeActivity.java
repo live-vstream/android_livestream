@@ -5,25 +5,25 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.AlertDialog;
-import android.util.Log;
-import android.view.View;
-import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.FrameLayout;
-import android.widget.Switch;
+import android.view.View;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -36,6 +36,7 @@ import com.example.muthaheer.livestream.fragments.ContactUsFragment;
 import com.example.muthaheer.livestream.fragments.CreateStreamFragment;
 import com.example.muthaheer.livestream.helper.SessionManager;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -49,21 +50,27 @@ public class HomeActivity extends AppCompatActivity
     String mAuthToken;
     AppController mApp;
 
+    ProgressDialog requestTokenProgress;
+
+    String mFileName;
+
+
     Toolbar toolbar;
     ActionBarDrawerToggle toggle;
     DrawerLayout drawer;
 
-    private SessionManager session;
+    private SessionManager sm;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-        session = new SessionManager(getApplicationContext());
-        mApp = (AppController) getApplicationContext();
 
-        mAuthToken = mApp.getSessionManager().getAuthToken();
+        mApp = (AppController) getApplicationContext();
+        sm = mApp.getSessionManager();
+
+        mAuthToken = sm.getAuthToken();
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -191,67 +198,15 @@ public class HomeActivity extends AppCompatActivity
     }
 
     @Override
-    public void onFragmentInteraction(final String streamName,final String streamToken) {
+    public void onFragmentInteraction(final String streamName) {
 
-        final ProgressDialog requestTokenProgress;
+
         requestTokenProgress = new ProgressDialog(HomeActivity.this, ProgressDialog.STYLE_SPINNER);
         requestTokenProgress.setMessage("Requesting Token for " + streamName);
         requestTokenProgress.setCancelable(false);
         requestTokenProgress.show();
 
-        // request for a token from server
-        StringRequest request = new StringRequest(Request.Method.POST, AppConfig.URL_GETTOKEN,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        requestTokenProgress.hide();
-                        try {
-                            JSONObject resJson = new JSONObject(response);
-                            //boolean success = resJson.getBoolean("success");
-                            String streamToken = resJson.getString("streamToken");
-
-                            displayTokenDialog(streamToken);
-
-
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-
-                    }
-                }) {
-            @Override
-            protected Map<String, String> getParams() {
-                // Posting parameters to login url
-                Map<String, String> params = new HashMap<String, String>();
-                params.put("token",streamToken);
-                params.put("title", streamName);
-
-
-                return params;
-            }
-
-            @Override
-            public Map<String, String> getHeaders() {
-                Map<String, String> headers = new HashMap<String, String>();
-                headers.put("Authorization", mAuthToken);
-
-                return headers;
-            }
-
-        };
-
-        AppController.getInstance().addToRequestQueue(request, "token_req");
-
-
-
-
-
+        createStream(streamName);
 
     }
 
@@ -271,6 +226,7 @@ public class HomeActivity extends AppCompatActivity
                     public void onClick(DialogInterface dialog, int which) {
                         // replace current fragment with CameraPreviewFragment
                         mApp.setCurrentStreamToken(streamToken);
+                        mApp.setCurrentStreamFileName(mFileName);
                         getSupportFragmentManager().beginTransaction()
                                 .replace(R.id.fragment_content, CameraPreviewFragment.newInstance())
                                 .commit();
@@ -286,7 +242,7 @@ public class HomeActivity extends AppCompatActivity
 
                         mApp.setCurrentStreamToken(streamToken);
                         getSupportFragmentManager().beginTransaction()
-                                .replace(R.id.fragment_content, CameraPreviewFragment.newInstance())
+                                .replace(R.id.main_content_frame, CameraPreviewFragment.newInstance())
                                 .commit();
                     }
                 })
@@ -299,12 +255,81 @@ public class HomeActivity extends AppCompatActivity
         progressDialog.setMessage("Logging out...");
         progressDialog.setTitle("Please wait");
         progressDialog.show();
-        session.setLogin(false);
+        sm.setLogin(false);
 
         progressDialog.dismiss();
         Intent i = new Intent(getApplicationContext(),SignupActivity.class);
         startActivity(i);
         Toast.makeText(this, "Logged out successfully!", Toast.LENGTH_LONG).show();
+    }
+
+    public void createStream(final String streamTitle) {
+        StringRequest req = new StringRequest(Request.Method.POST, AppConfig.URL_GETTOKEN, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                requestTokenProgress.dismiss();
+
+                try {
+                    JSONObject resJson = new JSONObject(response);
+                    String msg = resJson.getString("message");
+                    JSONObject stream = resJson.getJSONObject("stream");
+                    JSONArray tokens = stream.getJSONArray("tokens");
+                    JSONObject firstToken = tokens.getJSONObject(0);
+                    String mToken = firstToken.getString("value");
+                    mFileName = stream.getString("filename");
+                    displayTokenDialog(mToken);
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        requestTokenProgress.dismiss();
+                        Toast.makeText(getApplicationContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
+                        error.printStackTrace();
+
+                    }
+                }
+        ) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("Authorization", sm.getAuthToken());
+                //params.put("title", mStreamNameET.getText().toString());
+                Log.d("Create stream", "Auth: " + sm.getAuthToken());
+
+                return params;
+            }
+
+            @Override
+            public String getBodyContentType() {
+                return "application/json";
+            }
+
+            @Override
+            public byte[] getBody() throws AuthFailureError {
+                JSONObject jsonBody = new JSONObject();
+                String body="";
+                try {
+                    jsonBody.put("title", streamTitle);
+                    body = jsonBody.toString();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                return body.getBytes();
+            }
+        };
+
+        req.setRetryPolicy(new DefaultRetryPolicy(10000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
+
+        AppController.getInstance().addToRequestQueue(req, "token_req");
+
+
     }
 
 
